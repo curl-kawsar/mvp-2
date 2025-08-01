@@ -60,8 +60,28 @@ export default function Home() {
           >
             {/* Main Heading */}
             <div className="space-y-4">
-              <motion.h1 
-                className="text-5xl md:text-7xl font-bold tracking-tight"
+              {/* Brand Name */}
+              <motion.div
+                className="mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                <div className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-primary/10 to-blue-600/10 rounded-full border border-primary/20 mb-4">
+                  <span className="text-primary font-semibold text-lg tracking-wide">
+                    Welcome to
+                  </span>
+                </div>
+                <h1 className="text-4xl md:text-6xl font-black tracking-tight mb-2">
+                  <span className="bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    Chakri Khujo
+                  </span>
+        </h1>
+                <div className="w-24 h-1 bg-gradient-to-r from-primary to-blue-600 mx-auto rounded-full"></div>
+              </motion.div>
+
+              <motion.h2 
+                className="text-3xl md:text-5xl font-bold tracking-tight"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
@@ -70,7 +90,7 @@ export default function Home() {
                 <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
                   Dream Career
                 </span>
-              </motion.h1>
+              </motion.h2>
               <motion.p 
                 className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed"
                 initial={{ opacity: 0, y: 20 }}
