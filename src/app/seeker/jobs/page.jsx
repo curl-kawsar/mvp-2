@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { mockJobs } from "@/lib/mock-data";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { 
   Search, 
@@ -24,19 +24,29 @@ import {
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 
-export default function SeekerJobsPage() {
+// Component that uses useSearchParams
+function SearchParamsHandler({ onSearchUpdate }) {
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const urlSearch = searchParams.get('search');
+    if (urlSearch) {
+      onSearchUpdate(decodeURIComponent(urlSearch));
+    }
+  }, [searchParams, onSearchUpdate]);
+
+  return null;
+}
+
+// Main component
+function SeekerJobsContent() {
   const [searchTerm, setSearchTerm] = useState("");
   const [jobs] = useState(mockJobs);
   const [savedJobs, setSavedJobs] = useState(new Set());
 
-  // Initialize search term from URL parameters
-  useEffect(() => {
-    const urlSearch = searchParams.get('search');
-    if (urlSearch) {
-      setSearchTerm(decodeURIComponent(urlSearch));
-    }
-  }, [searchParams]);
+  const handleSearchUpdate = (search) => {
+    setSearchTerm(search);
+  };
 
   const filteredJobs = jobs.filter(job =>
     job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -69,8 +79,12 @@ export default function SeekerJobsPage() {
   };
 
   return (
-    <DashboardLayout>
-      <div className="space-y-6">
+    <>
+      <Suspense fallback={null}>
+        <SearchParamsHandler onSearchUpdate={handleSearchUpdate} />
+      </Suspense>
+      <DashboardLayout>
+        <div className="space-y-6">
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Job Search</h1>
@@ -315,7 +329,13 @@ export default function SeekerJobsPage() {
             </Button>
           </div>
         )}
-      </div>
-    </DashboardLayout>
+        </div>
+      </DashboardLayout>
+    </>
   );
+}
+
+// Main export with Suspense wrapper
+export default function SeekerJobsPage() {
+  return <SeekerJobsContent />;
 }
